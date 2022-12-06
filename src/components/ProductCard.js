@@ -1,7 +1,7 @@
 import React from "react";
 import { BiListPlus } from "react-icons/bi";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../redux/actionCreators/productActions";
+import { addToCart, removeFromCart } from "../redux/actionCreators/productActions";
 
 const ProductCard = ({ product, isInCart }) => {
   const dispatch = useDispatch();
@@ -29,21 +29,43 @@ const ProductCard = ({ product, isInCart }) => {
           })}
         </ul>
       </div>
-      {!isInCart && (
-        <div className='flex gap-2 mt-5'>
-          <button 
-            className='bg-indigo-500 rounded-full py-1 px-2 flex-1 text-white text-bold'
-            onClick={() => dispatch(addToCart(product))}
-          >
-            Add to cart
-          </button>
-          <button
-            title='Add to wishlist'
-            className='bg-indigo-500  py-1 px-2 rounded-full'
-          >
-            <BiListPlus className='text-white' />
-          </button>
+      {isInCart ? (
+          <div className='flex justify-center max-w-xs pt-5'>
+            <div className='flex justify-between items-center gap-2 '>
+              <button 
+                className={`${product.quantity === 1? "bg-red-500": "bg-indigo-500"} text-lg text-white rounded h-10 w-10`}
+                onClick={() => dispatch(removeFromCart(product))}
+              >
+                -
+              </button>
+              <div className='border flex-1 flex justify-center items-center h-10 w-20 rounded-md border-gray-300'>
+                <span className='text-lg'>
+                  { product.quantity }
+                </span>
+              </div>
+              <button 
+                className='bg-indigo-500 text-lg text-white rounded h-10 w-10'
+                onClick={() => dispatch(addToCart(product))}
+              >
+                +
+              </button>
+            </div>
         </div>
+        ) :  (
+          <div className='flex gap-2'>
+            <button 
+              className='bg-indigo-500 rounded-full py-1 px-2 flex-1 text-white text-bold'
+              onClick={() => dispatch(addToCart(product))}
+            >
+              Add to cart
+            </button>
+            <button
+              title='Add to wishlist'
+              className='bg-indigo-500  py-1 px-2 rounded-full'
+            >
+              <BiListPlus className='text-white' />
+            </button>
+          </div>
       )}
     </div>
   );
