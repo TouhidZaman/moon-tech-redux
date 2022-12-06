@@ -1,20 +1,25 @@
-import { DECREMENT, INCREMENT } from "../actionTypes"
+import { ADD_TO_CART } from "../actionTypes"
 
 const initialState = {
-    counter: 0
+    cart: []
 }
 
 export const productReducer = (state = initialState, action) => {
     switch(action.type) {
-        case INCREMENT:
-            return {
-                ...state,
-                counter: state.counter + 1
+        case ADD_TO_CART:
+            const newCart = [...state.cart]
+            const index = state.cart.map(product => product._id).indexOf(action.payload._id);
+            if(index !== -1) {
+                newCart[index].quantity = newCart[index].quantity + 1;
+                return {
+                    ...state,
+                    cart: newCart
+                }
             }
-        case DECREMENT:
+            newCart.push({...action.payload, quantity: 1})
             return {
                 ...state,
-                counter: state.counter? state.counter - 1 : 0
+                cart: newCart
             }
         default: 
             return state
