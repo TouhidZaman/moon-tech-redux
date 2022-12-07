@@ -1,4 +1,4 @@
-import { TOGGLE_STOCK } from "../actionTypes";
+import { TOGGLE_BRAND, TOGGLE_STOCK } from "../actionTypes";
 
 const initialState = {
     filters: {
@@ -15,6 +15,25 @@ export const filterReducer = (state = initialState, action) => {
                 filters: {
                     ...state.filters,
                     inStock: !state.filters.inStock
+                }
+            }
+
+        case TOGGLE_BRAND: 
+            const brandAlreadyExist = state.filters.brands.includes(action.payload);
+            if(brandAlreadyExist) {
+                return {
+                    ...state,
+                    filters: {
+                        ...state.filters,
+                        brands: state.filters.brands.filter(b => b !== action.payload)
+                    }
+                }
+            }
+            return {
+                ...state,
+                filters: {
+                    ...state.filters,
+                    brands: [...state.filters.brands, action.payload]
                 }
             }
 

@@ -1,19 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProductCard from "../../components/ProductCard";
-import { toggleStock } from "../../redux/actions/filterActions";
+import { toggleBrand, toggleStock } from "../../redux/actions/filterActions";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const filters = useSelector(state => state.filterReducer.filters)
   const dispatch = useDispatch()
+  let filteredProducts = []
 
   useEffect(() => {
     fetch("http://localhost:5000/products")
     .then(response => response.json())
     .then(data => setProducts(data.data))
   }, [])
-  
+
+
+  //Product filtering logics
+  const getStockFiltered = (items) => items.filter(p => p.status);
+  const getBrandFiltered = (items) => items.filter(p => filters.brands.includes(p.brand));
+
+  if(filters.inStock || filters.brands.length) {
+    let stockFiltered = getStockFiltered(products);
+    filteredProducts = getBrandFiltered(stockFiltered);
+  } 
+  else if(filters.inStock) {
+    filteredProducts = getStockFiltered(products);
+  }
+  else if(filters.brands.length) {
+    filteredProducts = getBrandFiltered(products);
+  }
+   else {
+    filteredProducts = products;
+  }
+
   const activeClass = "text-white  bg-indigo-500 border-white";
 
   return (
@@ -25,15 +45,21 @@ const Home = () => {
         >
           In Stock
         </button>
-        <button className={`border px-3 py-2 rounded-full font-semibold`}>
+        <button 
+          className={`border px-3 py-2 rounded-full font-semibold ${filters.brands.includes("amd") ? activeClass : ''}`}
+          onClick={() => dispatch(toggleBrand("amd"))}
+        >
           AMD
         </button>
-        <button className={`border px-3 py-2 rounded-full font-semibold`}>
+        <button 
+          className={`border px-3 py-2 rounded-full font-semibold ${filters.brands.includes("intel") ? activeClass : ''}`}
+          onClick={() => dispatch(toggleBrand("intel"))}
+        >
           Intel
         </button>
       </div>
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-7xl gap-14 mx-auto my-10'>
-        {products.map(product => <ProductCard
+        {filteredProducts.map(product => <ProductCard
           product={product} 
           key={product._id} 
         />)}
