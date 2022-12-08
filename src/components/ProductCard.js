@@ -12,9 +12,14 @@ const ProductCard = ({ product, isInCart }) => {
       key={product._id}
     >
       {isInCart && (
-        <div 
-          className="absolute top-3 right-3 bg-indigo-500 text-white rounded-md px-2"> 
-          {product.quantity}
+        <div className="flex justify-between">
+          <div>
+            <h3>{`Added on: ${product.dateTime.toLocaleString("en-US")}`}</h3>
+          </div>
+          <div 
+            className="bg-indigo-500 text-white rounded-md px-2"> 
+            {product.quantity}
+          </div>
         </div>
       )}
       <div className='h-52 w-52 mx-auto'>

@@ -20,7 +20,7 @@ const Home = () => {
   const getStockFiltered = (items) => items.filter(p => p.status);
   const getBrandFiltered = (items) => items.filter(p => filters.brands.includes(p.brand));
 
-  if(filters.inStock || filters.brands.length) {
+  if(filters.inStock && filters.brands.length) {
     let stockFiltered = getStockFiltered(products);
     filteredProducts = getBrandFiltered(stockFiltered);
   } 
