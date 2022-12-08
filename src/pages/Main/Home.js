@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import ProductCard from "../../components/ProductCard";
 import { toggleBrand, toggleStock } from "../../redux/actions/filterActions";
+import fetchProducts from "../../redux/thunks/fetchProducts";
 
 const Home = () => {
-  const [products, setProducts] = useState([]);
-  const filters = useSelector(state => state.filterReducer.filters)
-  const dispatch = useDispatch()
-  let filteredProducts = []
+  const products = useSelector(state => state.productReducer.products);
+  const filters = useSelector(state => state.filterReducer.filters);
+  const dispatch = useDispatch();
+  let filteredProducts = [];
 
   useEffect(() => {
-    fetch("http://localhost:5000/products")
-    .then(response => response.json())
-    .then(data => setProducts(data.data))
-  }, [])
+    dispatch(fetchProducts());
+  }, [dispatch])
 
 
   //Product filtering logics

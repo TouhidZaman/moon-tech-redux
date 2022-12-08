@@ -1,6 +1,9 @@
 import { createStore, applyMiddleware } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension"
-import cartDateTime from "./middlewares/cartDateTime";
+import { composeWithDevTools } from "redux-devtools-extension";
+import logger from "redux-logger"; //Middleware
+import thunk from "redux-thunk"; //Middleware
+
+import cartDateTime from "./middlewares/cartDateTime"; //Custom Middleware
 import rootReducer from "./reducers/rootReducer";
 
 const store = createStore(
@@ -8,7 +11,8 @@ const store = createStore(
     composeWithDevTools(
         applyMiddleware(
             cartDateTime,
-            //we can add more middleware's here separated by comma
+            thunk,
+            logger
         )
     )
 )

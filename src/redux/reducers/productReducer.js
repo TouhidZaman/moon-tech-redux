@@ -1,6 +1,7 @@
-import { ADD_TO_CART, REMOVE_FROM_CART } from "../actionTypes"
+import { ADD_TO_CART, LOAD_PRODUCTS, REMOVE_FROM_CART } from "../actionTypes"
 
 const initialState = {
+    products: [],
     cart: []
 }
 
@@ -12,6 +13,12 @@ export const productReducer = (state = initialState, action) => {
     }
 
     switch(action.type) {
+        case LOAD_PRODUCTS:
+            return {
+                ...state,
+                products: action.payload
+            }
+            
         case ADD_TO_CART:
             newCart = [...state.cart]
             index = getProductIndex(action.payload)
